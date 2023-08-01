@@ -1,0 +1,102 @@
+﻿@model IEnumerable<WebBanHang.Areas.Admin.Controllers.UserDto>
+@{
+    ViewBag.Title = "Quản lý tài khoản";
+}
+
+@section naviheader{
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin/home" class="nav-link">Trang chủ</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            <a href="/admin" class="nav-link">Quản lý tài khoản</a>
+        </li>
+    </ul>
+}
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Danh sách tài khoản</h3>
+
+            <div class="card-tools">
+                <a href="/admin/account/create" class="btn btn-success">Thêm mới</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tài khoản</th>
+                        <th>Họ tên</th>
+                        <th>Quyền</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        var i = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@i</td>
+                                <td>@item.UserName</td>
+                                <td>@item.Name</td>
+                                <td>@item.Role</td>
+                                <td>@item.Email</td>
+                                <td>
+                                    <a href="/admin/account/UpdateUserRole?userId=@item.Id" class="btn btn-sm btn-warning">Cập nhật</a>
+                                    <a class="btn btn-sm btn-danger btnDelete" data-id="@item.Id">Xóa</a>
+                                </td>
+                            </tr>
+                            i++;
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+
+        </div>
+        <!-- /.card-footer-->
+    </div>
+    <!-- /.card -->
+
+</section>
+<!-- /.content -->
+@section scripts{
+    <script>
+        $('.btnDelete').click(function () {
+            var confim = confirm("Bạn có muốn xóa user đang chọn?");
+            var tr = this;
+            if (confim) {
+                var data = $(this).data('id');
+                $.ajax({
+                    type: 'POST',
+                    data: {
+                        userId: data
+                    },
+                    url: '/admin/account/DeleteUserById',
+                    success: function (res) {
+                        debugger;
+                        if (res.success) {
+                            $(tr).closest('tr').remove();
+                        }                           
+                    }
+                })              
+            }          
+        })
+    </script>
+}
+

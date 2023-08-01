@@ -1,0 +1,128 @@
+﻿@model WebBanHang.Models.EF.Contact
+@{
+    ViewBag.Title = "Liên hệ";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_styles.css">
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/contact_responsive.css">
+<div class="container contact_container">
+    <div class="row">
+        <div class="col">
+
+            <!-- Breadcrumbs -->
+
+            <div class="breadcrumbs d-flex flex-row align-items-center">
+                <ul>
+                    <li><a href="index.html">Trang chủ</a></li>
+                    <li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Liên hệ</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Map Container -->
+
+    <div class="row">
+
+        <div class="col">
+            <div id="google_map">
+                <div class="map_container">
+                    <div id="map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d52416.0837156251!2d105.49841639468913!3d10.415250330928417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310a71e003f8d981%3A0x8f4e126820c65c39!2zSOG7mWkgQW4sIENo4bujIE3hu5tpLCBBbiBHaWFuZywgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1679836516835!5m2!1svi!2s" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <div class="col-md-6">
+        <h1>Thông tin liên hệ</h1>
+        <div>
+            @if (ViewBag.Message == null)
+            {
+                <div>
+                    <form method="post" id="formCreate">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label asp-for="Name">Tên</label>
+                            <input asp-for="Name" class="form-control" name="Name" />
+                            <span asp-validation-for="Name"
+                                  class="text-muted"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Email">Email</label>
+                            <input asp-for="Email" class="form-control" name="Email" />
+                            <span asp-validation-for="Email"
+                                  class="text-muted"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Phone">Số điện thoại</label>
+                            <input asp-for="Phone" class="form-control" name="Phone" />
+                            <span asp-validation-for="Phone"
+                                  class="text-muted"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Message">Thông tin liên hệ</label>
+                            <textarea rows="5" cols="15"
+                                      asp-for="Message" class="form-control" name="Message"></textarea>
+                            <span asp-validation-for="Message"
+                                  class="text-muted"></span>
+                        </div>
+                        @*<div>
+                            @using (Html.BeginForm("FormSubmit", "Contact", FormMethod.Post))
+                            {
+                                <div class="g-recaptcha" data-sitekey="6Ld2csQlAAAAADZocwCuPAKKw3F935rqzbp5kmlW"></div>
+
+                            }
+                        </div>*@
+
+                        <div>
+                            <button type="button" id="submitForm"
+                                    class="btn btn-success">
+                                Gửi
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            }
+        </div>
+
+        <div>
+            <div>
+                @if (ViewBag.Message != null)
+                {
+                    <div>@ViewBag.Message</div>
+                }
+            </div>
+        </div>
+    </div>
+    <hr />
+    @*<div class="col">
+        <h2>Thông tin liên hệ</h2>
+        <p>Tên: Huỳnh Phước Hải</p>
+        <p>SĐT:0333.569.388</p>
+        <p>Email: huynhtuanhai05042001@gmail.com</p>
+    </div>*@
+
+
+
+
+</div>
+@section scripts{
+    <script src="~/Content/assets/js/contact_custom.js"></script>s
+    @*<script src="https://www.google.com/recaptcha/api.js"type="text/javascript"></script>*@
+    <script>
+        $("#submitForm").click(function (e) {
+            debugger;
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                data: $("#formCreate").serializeArray(),
+                url: "/Contact/Create",
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+        })
+    </script>
+}

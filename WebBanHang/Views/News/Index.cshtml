@@ -1,0 +1,55 @@
+﻿@model IEnumerable<WebBanHang.Models.EF.News>
+@{
+    ViewBag.Title = "Index";
+}
+<link rel="stylesheet" type="text/css" href="~/Content/assets/styles/main_styles.css">
+<style>
+    .news_section_container{
+        margin-top:180px;
+    }
+    .row-item-new{
+        margin-bottom:20px;
+    }
+    .title-news{
+        font-size:24px;
+        border-bottom:1px solid;
+        padding:15px 0;
+        margin-bottom:25px;
+        color:#000000;
+    }
+    .img-box img{
+        max-width:100%;
+        max-height:100%
+    }
+</style>
+<div class="container news_section_container ">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="title-news">Tin tức</h1>
+        </div>
+    </div>
+    @if (Model != null && Model.Any())
+    {
+        foreach (var item in Model)
+        {
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="img-box">
+                        <a href="/@item.Alias-n@(item.Id)"title="@item.Title"><img src="@item.Image"/></a>
+                    </div>
+                </div>
+                
+                <div class="col-md-9">
+                    <div class="container-box">
+                        <h3><a href="/@item.Alias-n@(item.Id)" title="@item.Title">@item.Title</a></h3>
+                        <div class="description-box">
+                            @item.Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+    }
+
+</div>
